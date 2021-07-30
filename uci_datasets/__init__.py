@@ -43,75 +43,96 @@ large_datasets = ["3droad", "song", "buzz", "electric"]
 all_datasets = small_datasets + intermediate_datasets + large_datasets
 
 
-def load_dataset(
-    dataset: str, print_stats: bool = True
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """
-    load dataset
+class Dataset:
+    def __init__(self, dataset: str, dtype=np.float64, print_stats: bool = True):
+        """
+        load dataset
 
-    Inputs:
-        dataset: string
-            name of the dataset to load. This can be either the name of the directory
-            that the dataset is in OR the identifier used in papers. For example you can
-            specify dataset='houseelectric' OR dataset='electric' and it will give you the
-            same thing. This allows for convienent abbreviations.
-        print_stats: if true then will print stuff about the dataset
+        Inputs:
+            dataset: string
+                name of the dataset to load. This can be either the name of the directory
+                that the dataset is in OR the identifier used in papers. For example you can
+                specify dataset='houseelectric' OR dataset='electric' and it will give you the
+                same thing. This allows for convienent abbreviations.
+            print_stats: if true then will print stuff about the dataset
 
-    Outputs:
-        x: dataset inputs/features. Numpy ndarray of size (N,d).
-        y: dataset outputs/responses. Numpy ndarray of size (N,1).
-        test_mask: dataset test mask. Numpy bool ndarray of size (N,10).
-        train_mask: dataset train mask. Numpy bool ndarray of size (N,10).
+        """
+        assert isinstance(dataset, str), "dataset must be a string"
+        dataset = dataset.lower()  # convert to lowercase
+        dataset = dataset.replace(" ", "")  # remove whitespace
+        dataset = dataset.replace("_", "")  # remove underscores
 
-    Notes:
-        * train_mask and test mask are opposite, i.e. test_mask = np.logical_not(train_mask)
-    """
-    assert isinstance(dataset, str), "dataset must be a string"
-    dataset = dataset.lower()  # convert to lowercase
-    dataset = dataset.replace(" ", "")  # remove whitespace
-    dataset = dataset.replace("_", "")  # remove underscores
+        # get the identifier to directory map (NOTE: this may be incomplete)
+        id_map = {
+            "slump": "concreteslump",
+            "automobile": "autos",
+            "cancer": "breastcancer",
+            "hardware": "machine",
+            "forestfires": "forest",
+            "solarflare": "solar",
+            "gassensor": "gas",
+            "poletele": "pol",
+            "kegg": "keggdirected",
+            "keggu": "keggundirected",
+            "ctslice": "slice",
+            "electric": "houseelectric",
+            "pumadyn": "pumadyn32nm",
+        }
+        if dataset in id_map:
+            dataset = id_map[dataset]
 
-    # get the identifier to directory map (NOTE: this may be incomplete)
-    id_map = {
-        "slump": "concreteslump",
-        "automobile": "autos",
-        "cancer": "breastcancer",
-        "hardware": "machine",
-        "forestfires": "forest",
-        "solarflare": "solar",
-        "gassensor": "gas",
-        "poletele": "pol",
-        "kegg": "keggdirected",
-        "keggu": "keggundirected",
-        "ctslice": "slice",
-        "electric": "houseelectric",
-        "pumadyn": "pumadyn32nm",
-    }
-    if dataset in id_map:
-        dataset = id_map[dataset]
+        # get the directory this file is in and load the dataset
+        path = os.path.split(os.path.abspath(__file__))[0] + "/../"
+        try:
+            self.test_mask = np.loadtxt(
+                fname=path + "/" + dataset + "/test_mask.csv.gz",
+                dtype=bool,
+                delimiter=",",
+            )
+            data = np.loadtxt(
+                fname=path + "/" + dataset + "/data.csv.gz", dtype=dtype, delimiter=",",
+            )
+        except:
+            print("Load failed, maybe dataset string is not correct.")
+            raise
 
-    # get the directory this file is in and load the dataset
-    path = os.path.split(os.path.abspath(__file__))[0] + "/../"
-    try:
-        test_mask = np.loadtxt(
-            fname=path + "/" + dataset + "/test_mask.csv.gz", dtype=bool, delimiter=","
-        )
-        data = np.loadtxt(fname=path + "/" + dataset + "/data.csv.gz", delimiter=",")
-    except:
-        print("Load failed, maybe dataset string is not correct.")
-        raise
+        # generate the train_mask
+        # train_mask and test mask are opposite, i.e. test_mask = np.logical_not(train_mask)
+        self.train_mask = np.logical_not(self.test_mask)
 
-    # generate the train_mask
-    train_mask = np.logical_not(test_mask)
+        # extract the inputs and reponse
+        self.x = data[:, :-1]
+        self.y = data[:, -1, None]
 
-    # extract the inputs and reponse
-    x = data[:, :-1]
-    y = data[:, -1].reshape((-1, 1))
+        # print stats
+        if print_stats:
+            print(
+                "%s dataset, N=%d, d=%d" % (dataset, self.x.shape[0], self.x.shape[1])
+            )
 
-    # print stats
-    if print_stats:
-        print("%s dataset, N=%d, d=%d" % (dataset, x.shape[0], x.shape[1]))
-    return x, y, test_mask, train_mask
+    def get_split(
+        self, split: int = 0
+    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+        """
+        Get the test and train points for the specified split.
+        Inputs:
+            split : (int) index of the requested split. There are 10 test train splits 
+            for each dataset so this value can be any integer from 0 to 9 (inclusive).
+
+        Outputs:
+            x_train: training dataset inputs/features. Numpy ndarray of size (n,d).
+            y_train: training dataset outputs/responses. Numpy ndarray of size (n,1).
+            x_test: testing dataset inputs/features. Numpy ndarray of size (m,d).
+            y_test: testing dataset outputs/responses. Numpy ndarray of size (m,1).
+        """
+        assert isinstance(split, int)
+        assert split >= 0
+        assert split < 10
+        x_test = self.x[self.test_mask[:, split], :]
+        x_train = self.x[self.train_mask[:, split], :]
+        y_test = self.y[self.test_mask[:, split], :]
+        y_train = self.y[self.train_mask[:, split], :]
+        return x_train, y_train, x_test, y_test
 
 
 def csv_results(
