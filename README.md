@@ -21,7 +21,7 @@ x_train, y_train, x_test, y_test = data.get_split(split=0)
 ```
 There are 10 test train splits for each dataset (as in 10-fold cross validation) with 90% of the dataset being training points and 10% being testing points in each split.
 The `split` parameter of the `Dataset.get_split` method accepts integers from 0 to 9 (inclusive).
-The dataset can be referenced by the name of its respective folder in the repository.
+The dataset can be retrieved by the name of its respective folder in the repository.
 
 # Papers using these datasets
 The following papers use the same datasets and test-train splits present in this repository.
