@@ -15,3 +15,4 @@ data = Dataset("challenger")
 x_train, y_train, x_test, y_test = data.get_split(split=0)
 ```
 There are 10 test train splits for each dataset so the `split` parameter of `get_split` method accepts integers from 0 to 9 (inclusive).
+The dataset can be referenced by the name of its respective folder in the repository.
