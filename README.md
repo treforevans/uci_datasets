@@ -1,7 +1,7 @@
 Regression datasets from the [UCI machine learning repository](https://archive.ics.uci.edu) prepared for benchmarking studies with test-train splits.
 
 # Setup
-This repository uses [git large file storage](https://git-lfs.github.com/) so you must first install [git LFS](https://github.com/git-lfs/git-lfs/wiki/Installation) otherwise the cloned repo will only contain pointer files rather than the data files.
+This repository uses [git large file storage](https://git-lfs.github.com/) so you must first [install git LFS](https://github.com/git-lfs/git-lfs/wiki/Installation) otherwise the cloned repo will only contain pointer files rather than the data files.
 The size of the repository is about 319 Mb.
 
 After installing git LFS you can simply clone and setup the python package as follows:
@@ -19,7 +19,7 @@ from uci_datasets import Dataset
 data = Dataset("challenger")
 x_train, y_train, x_test, y_test = data.get_split(split=0)
 ```
-There are 10 test train splits for each dataset (as in 10-fold cross validation) with 90% of the dataset being training points and 10% being testing points in each split.
+There are 10 test-train splits for each dataset (as in 10-fold cross validation) with 90% of the dataset being training points and 10% being testing points in each split.
 The `split` parameter of the `Dataset.get_split` method accepts integers from 0 to 9 (inclusive).
 The dataset can be retrieved by the name of its respective folder in the repository.
 
