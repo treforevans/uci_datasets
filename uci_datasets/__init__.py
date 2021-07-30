@@ -5,6 +5,8 @@ from typing import Tuple
 
 
 # save some global variables
+# Identify the small, intermediate, and large datasets from Yang et al., 2016 by the
+# name of the dataset reported in that paper.
 small_datasets = [
     "challenger",
     "fertility",
@@ -40,7 +42,45 @@ intermediate_datasets = [
     "ctslice",
 ]
 large_datasets = ["3droad", "song", "buzz", "electric"]
-all_datasets = small_datasets + intermediate_datasets + large_datasets
+# also Identify all of the datasets, note that it is just in alphabetical order
+all_datasets = [
+    "3droad",
+    "autompg",
+    "bike",
+    "challenger",
+    "concreteslump",
+    "energy",
+    "forest",
+    "houseelectric",
+    "keggdirected",
+    "kin40k",
+    "parkinsons",
+    "pol",
+    "pumadyn32nm",
+    "slice",
+    "solar",
+    "stock",
+    "yacht",
+    "airfoil",
+    "autos",
+    "breastcancer",
+    "buzz",
+    "concrete",
+    "elevators",
+    "fertility",
+    "gas",
+    "housing",
+    "keggundirected",
+    "machine",
+    "pendulum",
+    "protein",
+    "servo",
+    "skillcraft",
+    "sml",
+    "song",
+    "tamielectric",
+    "wine",
+]
 
 
 class Dataset:
