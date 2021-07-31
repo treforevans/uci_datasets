@@ -14,5 +14,6 @@ from uci_datasets import Dataset
 data = Dataset("challenger")
 x_train, y_train, x_test, y_test = data.get_split(split=0)
 ```
-There are 10 test train splits for each dataset so the `split` parameter of `get_split` method accepts integers from 0 to 9 (inclusive).
+There are 10 test train splits for each dataset (as in 10-fold cross validation) with 90% of the dataset being training points and 10% being testing points in each split.
+The `split` parameter of `get_split` method accepts integers from 0 to 9 (inclusive).
 The dataset can be referenced by the name of its respective folder in the repository.
