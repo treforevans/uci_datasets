@@ -1,8 +1,10 @@
 Regression datasets with test-train splits from the [UCI machine learning repository](https://archive.ics.uci.edu).
 
 # Setup
-Simply download and run
+Simply clone and setup:
 ```bash
+git clone git@github.com:treforevans/uci_datasets.git
+cd uci_datasets
 python setup.py develop
 ```
 *Note that you must use `develop` in the above line, not `install`.*
