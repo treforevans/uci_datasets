@@ -1,4 +1,4 @@
-UCI regression datasets with included test-train splits.
+Regression datasets with test-train splits from the [UCI machine learning repository](https://archive.ics.uci.edu).
 
 # Setup
 Simply download and run
