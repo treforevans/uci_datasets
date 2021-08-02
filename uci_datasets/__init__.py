@@ -177,15 +177,7 @@ class Dataset:
 
 
 def csv_results(
-    fname,
-    runstr,
-    i_split,
-    rmse=None,
-    rmse_norm=None,
-    time=None,
-    notes=None,
-    N=None,
-    d=None,
+    fname, runstr, i_split, rmse=None, mnlp=None, time=None, notes=None, N=None, d=None,
 ):
     """
     save results to csv file
@@ -194,8 +186,8 @@ def csv_results(
         fname : csv filename to save the file to/append results to
         runstr : identifier for the current run. Typically relates to a dataset with specific parameter settings
         i_split : the index of the train/test split (0 to 9)
-        rmse : root mean squared error on test set with un-normalized responses
-        rmse_norm : root mean squared error on test set with normalized responses
+        rmse : root mean squared error on test set
+        mnlp : mean-negative log probability of the test set
         time : train time
         notes : any other notes you want to add
         N : number of points (typically including both the train and test set)
@@ -206,10 +198,10 @@ def csv_results(
     """
     # check if the csv file exists, and if not then create it
     columns = (
-        ["N", "d", "Time", "RMSE", "RMSE Normalized", "Notes"]
+        ["N", "d", "Time", "RMSE", "MNLP", "Notes"]
         + ["time_%d" % i for i in range(10)]
         + ["rmse_%d" % i for i in range(10)]
-        + ["rmse_norm_%d" % i for i in range(10)]
+        + ["mnlp_%d" % i for i in range(10)]
     )
     if os.path.isfile(fname):
         df = pandas.read_csv(fname, index_col=0)
@@ -223,15 +215,15 @@ def csv_results(
         df.loc[runstr, "d"] = "%d" % d
     if rmse is not None:
         df.loc[runstr, "rmse_%d" % i_split] = rmse
-    if rmse_norm is not None:
-        df.loc[runstr, "rmse_norm_%d" % i_split] = rmse_norm
+    if mnlp is not None:
+        df.loc[runstr, "mnlp_%d" % i_split] = mnlp
     if time is not None:
         df.loc[runstr, "time_%d" % i_split] = time
     if notes is not None:
         df.loc[runstr, "Notes"] = notes
 
     # update the means and stds
-    for pres_col, data_col in [("RMSE", "rmse"), ("RMSE Normalized", "rmse_norm")]:
+    for pres_col, data_col in [("RMSE", "rmse"), ("MNLP", "mnlp")]:
         df.loc[runstr, pres_col] = "$%g \pm %g$" % (
             np.around(
                 np.nanmean(
