@@ -65,9 +65,11 @@ The below table contains the size (number of observations) and the number of inp
 | `tamielectric`  |  45781  |  3      |
 | `wine`  |  1599  |  11              |
 
-A list of all the dataset names can be obtained as follows:
+Dataset information can be obtained from the `all_datasets` dictionary.
+For example, to obtain a list of all datasets with fewer than 1000 observations, execute the following:
 ```python
-from uci_datasets import all_datasets # list of all dataset names
+from uci_datasets import all_datasets
+[name for name, (n_observations, n_dimensions) in all_datasets.items() if n_observations < 1000]
 ```
 # Papers using these datasets
 The following papers use the same datasets and test-train splits present in this repository.
