@@ -1,10 +1,7 @@
 Regression datasets from the [UCI machine learning repository](https://archive.ics.uci.edu) prepared for benchmarking studies with test-train splits.
 
 # Setup
-This repository uses [git large file storage](https://git-lfs.github.com/) so you must first [install git LFS](https://github.com/git-lfs/git-lfs/wiki/Installation) otherwise the cloned repo will only contain pointer files rather than the data files.
-The size of the repository is about 319 Mb.
-
-After installing git LFS you can simply clone and setup the python package as follows:
+Simply clone and setup the python package as follows (the size of the repository is about 319 Mb).
 ```bash
 git clone https://github.com/treforevans/uci_datasets.git
 cd uci_datasets
