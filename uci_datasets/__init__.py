@@ -133,6 +133,20 @@ class Dataset:
             data = np.loadtxt(
                 fname=path + "/" + dataset + "/data.csv.gz", dtype=dtype, delimiter=",",
             )
+            # write a special condition for the song dataset which needs to be split
+            # due to file size limitations
+            if dataset == "song":
+                data = np.concatenate(
+                    [
+                        data,
+                        np.loadtxt(
+                            fname=path + "/" + dataset + "/data1.csv.gz",
+                            dtype=dtype,
+                            delimiter=",",
+                        ),
+                    ],
+                    axis=0,
+                )
         except:
             print("Load failed, maybe dataset string is not correct.")
             raise
