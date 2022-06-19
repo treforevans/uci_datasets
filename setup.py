@@ -8,5 +8,6 @@ setup(
     author="Trefor W. Evans",
     author_email="trefor.evans@mail.utoronto.ca",
     packages=["uci_datasets"],
+    package_data={'uci_datasets': ["**/*.csv.gz"]},
     zip_safe=True,
 )
