@@ -123,7 +123,7 @@ class Dataset:
             dataset = id_map[dataset]
 
         # get the directory this file is in and load the dataset
-        path = os.path.split(os.path.abspath(__file__))[0] + "/../"
+        path = os.path.dirname(__file__)
         try:
             self.test_mask = np.loadtxt(
                 fname=path + "/" + dataset + "/test_mask.csv.gz",
