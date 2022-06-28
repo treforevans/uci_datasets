@@ -126,12 +126,14 @@ class Dataset:
         path = os.path.dirname(__file__)
         try:
             self.test_mask = np.loadtxt(
-                fname=path + "/" + dataset + "/test_mask.csv.gz",
+                fname=os.path.join(path, dataset, "test_mask.csv.gz"),
                 dtype=bool,
                 delimiter=",",
             )
             data = np.loadtxt(
-                fname=path + "/" + dataset + "/data.csv.gz", dtype=dtype, delimiter=",",
+                fname=os.path.join(path, dataset, "data.csv.gz"),
+                dtype=dtype,
+                delimiter=",",
             )
             # write a special condition for the song dataset which needs to be split
             # due to file size limitations
@@ -140,7 +142,7 @@ class Dataset:
                     [
                         data,
                         np.loadtxt(
-                            fname=path + "/" + dataset + "/data1.csv.gz",
+                            fname=os.path.join(path, dataset, "data1.csv.gz"),
                             dtype=dtype,
                             delimiter=",",
                         ),

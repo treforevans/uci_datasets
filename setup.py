@@ -4,7 +4,7 @@ setup(
     name="uci_datasets",
     version="1.0",
     description="UCI regression datasets.",
-    url="",
+    url="https://github.com/treforevans/uci_datasets",
     author="Trefor W. Evans",
     author_email="trefor.evans@mail.utoronto.ca",
     packages=["uci_datasets"],
