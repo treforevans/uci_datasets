@@ -3,6 +3,7 @@ import os
 import pandas
 from typing import Tuple
 
+__version__ = "1.1.0"
 
 # save some global variables
 # Identify the small, intermediate, and large datasets from Yang et al., 2016 by the
