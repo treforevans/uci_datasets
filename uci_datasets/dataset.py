@@ -2,7 +2,6 @@ import numpy as np
 import os
 from typing import Tuple
 
-__version__ = "1.1.0"
 
 # save some global variables
 # Identify the small, intermediate, and large datasets from Yang et al., 2016 by the
@@ -85,19 +84,18 @@ all_datasets = {
 
 
 class Dataset:
+    """
+    Load UCI dataset.
+
+    Args:
+        dataset: name of the dataset to load. This can be either the name of the directory
+            that the dataset is in OR the identifier used in papers. For example you can
+            specify dataset='houseelectric' OR dataset='electric' and it will give you the
+            same thing. This allows for convienent abbreviations.
+        print_stats: if true then will print stats about the dataset.
+    """
+
     def __init__(self, dataset: str, dtype=np.float64, print_stats: bool = True):
-        """
-        load dataset
-
-        Args:
-            dataset: string
-                name of the dataset to load. This can be either the name of the directory
-                that the dataset is in OR the identifier used in papers. For example you can
-                specify dataset='houseelectric' OR dataset='electric' and it will give you the
-                same thing. This allows for convienent abbreviations.
-            print_stats: if true then will print stuff about the dataset
-
-        """
         assert isinstance(dataset, str), "dataset must be a string"
         dataset = dataset.lower()  # convert to lowercase
         dataset = dataset.replace(" ", "")  # remove whitespace
@@ -174,14 +172,14 @@ class Dataset:
         Get the test and train points for the specified split.
 
         Args:
-            split : (int) index of the requested split. There are 10 test train splits 
-            for each dataset so this value can be any integer from 0 to 9 (inclusive).
+            split : index of the requested split. There are 10 test train splits 
+                for each dataset so this value can be any integer from 0 to 9 (inclusive).
 
         Returns:
-            x_train: training dataset inputs/features. Numpy ndarray of size (n,d).
-            y_train: training dataset outputs/responses. Numpy ndarray of size (n,1).
-            x_test: testing dataset inputs/features. Numpy ndarray of size (m,d).
-            y_test: testing dataset outputs/responses. Numpy ndarray of size (m,1).
+            x_train: training dataset inputs/features. Size `(n,d)`.
+            y_train: training dataset outputs/responses. Size `(n,1)`.
+            x_test: testing dataset inputs/features. Size `(m,d)`.
+            y_test: testing dataset outputs/responses. Size `(m,1)`.
         """
         assert isinstance(split, int)
         assert split >= 0
@@ -201,7 +199,8 @@ def csv_results(
 
     Args:
         fname : csv filename to save the file to/append results to
-        runstr : identifier for the current run. Typically relates to a dataset with specific parameter settings
+        runstr : identifier for the current run. Typically relates to a dataset with
+            specific parameter settings
         i_split : the index of the train/test split (0 to 9)
         rmse : root mean squared error on test set
         mnlp : mean-negative log probability of the test set
@@ -243,7 +242,7 @@ def csv_results(
 
     # update the means and stds
     for pres_col, data_col in [("RMSE", "rmse"), ("MNLP", "mnlp")]:
-        df.loc[runstr, pres_col] = "$%g \pm %g$" % (
+        df.loc[runstr, pres_col] = r"$%g \pm %g$" % (
             np.around(
                 np.nanmean(
                     [df.loc[runstr, "%s_%d" % (data_col, i)] for i in range(10)]
