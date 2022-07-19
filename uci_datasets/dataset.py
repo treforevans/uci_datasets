@@ -1,6 +1,5 @@
 import numpy as np
 import os
-import pandas
 from typing import Tuple
 
 __version__ = "1.1.0"
@@ -90,7 +89,7 @@ class Dataset:
         """
         load dataset
 
-        Inputs:
+        Args:
             dataset: string
                 name of the dataset to load. This can be either the name of the directory
                 that the dataset is in OR the identifier used in papers. For example you can
@@ -173,11 +172,12 @@ class Dataset:
     ) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
         """
         Get the test and train points for the specified split.
-        Inputs:
+
+        Args:
             split : (int) index of the requested split. There are 10 test train splits 
             for each dataset so this value can be any integer from 0 to 9 (inclusive).
 
-        Outputs:
+        Returns:
             x_train: training dataset inputs/features. Numpy ndarray of size (n,d).
             y_train: training dataset outputs/responses. Numpy ndarray of size (n,1).
             x_test: testing dataset inputs/features. Numpy ndarray of size (m,d).
@@ -197,9 +197,9 @@ def csv_results(
     fname, runstr, i_split, rmse=None, mnlp=None, time=None, notes=None, N=None, d=None,
 ):
     """
-    save results to csv file
+    save results to csv file.
 
-    Inputs:
+    Args:
         fname : csv filename to save the file to/append results to
         runstr : identifier for the current run. Typically relates to a dataset with specific parameter settings
         i_split : the index of the train/test split (0 to 9)
@@ -210,9 +210,11 @@ def csv_results(
         N : number of points (typically including both the train and test set)
         d : input dimensionality
 
-    Outputs:
+    Returns:
         df : dataframe with results. Results are also saved to file.
     """
+    import pandas
+
     # check if the csv file exists, and if not then create it
     columns = (
         ["N", "d", "Time", "RMSE", "MNLP", "Notes"]
